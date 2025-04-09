@@ -5,8 +5,10 @@ from reviews_app.models import Reviews
 from profile_app.models import UserProfile
 from offers_app.models import Offer
 from django.db.models import Avg
+from rest_framework.permissions import AllowAny
 
 class BaseInfoView(APIView):
+    permission_classes = [AllowAny]
     """
     API endpoint that provides basic platform statistics, including the number of reviews,
     average rating, number of business profiles, and number of offers.

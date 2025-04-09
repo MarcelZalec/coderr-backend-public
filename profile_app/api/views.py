@@ -19,6 +19,8 @@ class BusinessProfileView(APIView):
     """
     API endpoint for retrieving all business user profiles.
     """
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get(self, request):
         """

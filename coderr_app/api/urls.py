@@ -7,7 +7,7 @@ from orders_app.api.views import OrderCountAPIView, CompletedOrderCount
 
 urlpatterns = [ 
     path('offers/', include('offers_app.api.urls')), 
-    path('offerdetails/<int:pk>/', SingleOfferDetailView.as_view(), name='offer-detail-view'),
+    path('offerdetails/<int:pk>/', SingleOfferDetailView.as_view(), name='offerdetails-detail'),
     path('orders/', include('orders_app.api.urls')),
     path('base-info/', BaseInfoView.as_view(), name='base-info'),
     # path('init-db/', InitDBService.as_view(), name='init-db'),
