@@ -40,12 +40,16 @@ class OrderCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         request = self.context['request']
-        offer_detail_id = validated_data['offer_detail_id']
+        detail_id = validated_data['offer_detail_id']
 
         try:
-            detail = OfferDetails.objects.get(id=offer_detail_id)
+            detail = OfferDetails.objects.get(id=detail_id)
         except OfferDetails.DoesNotExist:
             raise serializers.ValidationError("OfferDetail wurde nicht gefunden.")
+        
+        # print(vars(detail))
+        # print(vars(request.user))
+        # print(detail.__dict__)
 
         return Order.objects.create(
             offerdetails=detail,

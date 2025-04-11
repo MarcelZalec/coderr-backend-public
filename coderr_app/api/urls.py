@@ -17,7 +17,5 @@ urlpatterns = [
     path('profile/<int:user>/', UserProfileDetail.as_view(), name='profile-detail'),
     path('reviews/', include('reviews_app.api.urls')),
     path('login/', CustomLoginView.as_view()),
-    # path('password-reset/', RequestPasswordReset.as_view(), name='password_reset'),
-    # path('password-reset/<token>/', PasswordResetView.as_view(), name='password_reset_token'),
     path('registration/', RegistrationView.as_view()),
 ]

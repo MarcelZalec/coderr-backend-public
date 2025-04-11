@@ -15,6 +15,7 @@ class OfferViewSet(viewsets.ModelViewSet):
     ordering_fields = ['min_price', 'updated_at']
     pagination_class = ResultPagination
     permission_classes = [setStandartPermission]
+    authentication_classes = [TokenAuthentication]
 
     def get_serializer_class(self):
         if self.action == 'list':

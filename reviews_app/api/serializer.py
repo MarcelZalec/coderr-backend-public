@@ -19,6 +19,6 @@ class ReviewsPOSTSerializer(serializers.ModelSerializer):
         reviewer = request.user
         business_user = data.get('business_user')
 
-        if Reviews.objects.filter(reviewer=reviewer, business_user=business_user).exists():
+        if Reviews.objects.filter(reviewer=reviewer, business_user=business_user).exists() and request.method != 'PATCH':
             raise serializers.ValidationError("Du kannst nur eine Bewertung pro Anbieter schreiben!")
         return data

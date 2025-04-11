@@ -1,19 +1,17 @@
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from orders_app.models import Order
-from offers_app.models import OfferDetails
 from profile_app.models import UserProfile
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import action
-from auth_app.api.permissions import setStandartPermission, IsAuthenticated
-from auth_app.api.permissions import IsOwnerOrAdmin, IsAuthenticated
+from auth_app.api.permissions import setStandartPermission, IsOwnerOrAdmin
 
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all().order_by('created_at')
     permission_classes=[setStandartPermission]
+    authentication_classes = [TokenAuthentication]
     pagination_class = None
 
     def get_serializer_class(self):
@@ -22,23 +20,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         return OrderSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(
-            data=request.data, context={'request': request})
+        serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
 
         return Response(OrderSerializer(order, context={'request': request}).data, status=status.HTTP_201_CREATED)
-
-
-class GetCompletedOrderView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, business_user):
-        count = Order.objects.filter(
-            business_user=business_user, status="completed").count()
-        return Response({
-            "completed_order_count": count
-        })
 
 
 class CompletedOrderCount(APIView):

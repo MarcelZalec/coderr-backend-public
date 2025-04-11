@@ -16,7 +16,7 @@ class IsOwnerOrAdmin(BasePermission):
         elif request.method in ["PATCH", "DELETE"]:
             return bool(request.user == obj.user)
         return False
-    
+
     
 class setStandartPermission(BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -27,3 +27,15 @@ class setStandartPermission(BasePermission):
         if request.method in ['PATCH', 'DELETE']:
             return [IsOwnerOrAdmin()]
         return [IsAuthenticated()]
+
+
+class IsCustomer(BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in ['DELETE'] and request.user.is_superuser:
+            return True
+        if request.method == 'GET':
+            return IsAuthenticated()
+        if request.method in ['PATCH', 'POST', 'DELETE'] and request.user.profile.type == "customer" and request.user == obj.reviewer:
+            return True
+        return False
