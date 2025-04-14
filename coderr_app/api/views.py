@@ -32,7 +32,3 @@ class BaseInfoView(APIView):
         }
 
         return Response(data, status=status.HTTP_200_OK)
-
-
-class InitDBService(APIView):
-    pass

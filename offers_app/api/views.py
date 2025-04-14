@@ -1,23 +1,21 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, viewsets, filters
 from offers_app.models import Offer, OfferDetails
-from .serializer import SingleOfferListSerializer, OfferWriteSerializer, OffersListSerializer, OfferDetailSerializer, GetOfferSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.authentication import TokenAuthentication
-# from .pagination import ResultsSetPagination
-from rest_framework import filters
+from .serializer import *
+from .pagination import ResultPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import OfferFilter
-from auth_app.api.permissions import *
-from rest_framework.viewsets import GenericViewSet
+from auth_app.api.permissions import IsAuthenticated, setStandartPermission
+from rest_framework.authentication import TokenAuthentication
 
-class OfferViewSet(GenericViewSet):
+class OfferViewSet(viewsets.ModelViewSet):
     queryset = Offer.objects.all()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = OfferFilter
     search_fields = ['title', 'description']
     ordering_fields = ['min_price', 'updated_at']
-    #pagination_class = ResultsSetPagination
-    permission_classes = [IsOwnerOrAdmin]
+    pagination_class = ResultPagination
+    permission_classes = [setStandartPermission]
+    authentication_classes = [TokenAuthentication]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -39,4 +37,10 @@ class OfferViewSet(GenericViewSet):
 class SingleOfferDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = OfferDetails.objects.all()
     serializer_class = OfferDetailSerializer
-    permission_classes = [setStandartPermission]
+    permission_classes = [IsAuthenticated]
+
+
+class OffersView(viewsets.ModelViewSet):
+    queryset = Offer.objects.all()
+    authentication_classes= [TokenAuthentication]
+    serializer_class = OffersXXSerializer

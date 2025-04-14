@@ -18,10 +18,10 @@ class RegistrationView(APIView):
         if serializer.is_valid():
             saved_account, user_type = serializer.save()
 
-            # es wird immer ein token erstellt
+
             token, created = Token.objects.get_or_create(user=saved_account)
 
-            # es wird ein userprofile erstellt
+
             UserProfile.objects.get_or_create(
                 user=saved_account, username=saved_account.username, type=user_type,
                 email=saved_account.email)

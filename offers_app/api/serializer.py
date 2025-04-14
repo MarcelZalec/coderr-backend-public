@@ -37,7 +37,6 @@ class OffersListSerializer(serializers.ModelSerializer):
         return obj.details.aggregate(min_time=Min('delivery_time_in_days'))['min_time']
 
     def get_user_details(self, obj):
-        # print(f"User ID == { UserProfile.objects.get(id)} und obj ID == {obj.user_id}")
         try:
             user = UserProfile.objects.get(user_id=obj.user_id)
         except UserProfile.DoesNotExist:

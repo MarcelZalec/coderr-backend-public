@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from orders_app.models import Order
 from offers_app.models import OfferDetails, Offer
@@ -9,25 +9,6 @@ from rest_framework.response import Response
 from auth_app.api.permissions import setStandartPermission, IsOwnerOrAdmin, AllowAny
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-
-
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all().order_by('created_at')
-    permission_classes=[setStandartPermission]
-    authentication_classes = [TokenAuthentication]
-    pagination_class = None
-
-    def get_serializer_class(self):
-        # if self.action == "create":
-        #     return OrderCreateSerializer
-        return OrderSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        order = serializer.save()
-
-        return Response(OrderSerializer(order, context={'request': request}).data, status=status.HTTP_201_CREATED)
 
 
 class CompletedOrderCount(APIView):
@@ -59,7 +40,7 @@ class OrderCountAPIView(APIView):
         return Response({'order_count':order_count}, status=status.HTTP_200_OK)
 
 
-class OrderViewSetff(APIView):
+class OrderViewSet(APIView):
     permission_classes=[AllowAny ,setStandartPermission]
     authentication_classes = [TokenAuthentication]
     pagination_class = None

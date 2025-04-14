@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import BaseInfoView, InitDBService
+from .views import BaseInfoView
 from auth_app.api.views import CustomLoginView, RegistrationView
 from offers_app.api.views import SingleOfferDetailView
 from profile_app.api.views import UserProfileDetail
@@ -10,7 +10,6 @@ urlpatterns = [
     path('offerdetails/<int:pk>/', SingleOfferDetailView.as_view(), name='offerdetails-detail'),
     path('orders/', include('orders_app.api.urls')),
     path('base-info/', BaseInfoView.as_view(), name='base-info'),
-    # path('init-db/', InitDBService.as_view(), name='init-db'),
     path('order-count/<int:business_user_id>/', OrderCountAPIView.as_view(), name='order-count'),
     path('completed-order-count/<int:business_user_id>/', CompletedOrderCount.as_view(), name='completed-order-count'),
     path('profiles/', include('profile_app.api.urls')),
