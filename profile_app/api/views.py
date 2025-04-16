@@ -12,6 +12,7 @@ class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsOwnerOrAdmin]
+    authentication_classes = [TokenAuthentication]
     lookup_field = "user"
 
 

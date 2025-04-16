@@ -37,7 +37,7 @@ class OfferViewSet(viewsets.ModelViewSet):
 class SingleOfferDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = OfferDetails.objects.all()
     serializer_class = OfferDetailSerializer
-    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
 
 class OffersView(viewsets.ModelViewSet):
