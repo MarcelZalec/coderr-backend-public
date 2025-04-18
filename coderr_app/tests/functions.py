@@ -10,7 +10,7 @@ from reviews_app.models import Reviews
 
 def create_and_login_test_user(self):
     self.user = User.objects.create_user(
-        username='testuser', email='test@mail.com', is_staff=True) 
+        username='testuser', email='test@mail.com', is_active=True) 
     self.token = Token.objects.create(user=self.user)
     self.client = APIClient()
     self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)

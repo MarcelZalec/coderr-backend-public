@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('coderr_app.api.urls')),
     path('auth/', include('auth_app.api.urls')),
+    # path('auth-app', include('rest_framework.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

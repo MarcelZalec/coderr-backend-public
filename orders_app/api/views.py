@@ -6,7 +6,7 @@ from profile_app.models import UserProfile
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from auth_app.api.permissions import setStandartPermission, IsOwnerOrAdmin, AllowAny
+from auth_app.api.permissions import SetStandardPermission, IsOwnerOrAdmin, AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
@@ -41,12 +41,14 @@ class OrderCountAPIView(APIView):
 
 
 class OrderViewSet(APIView):
-    permission_classes=[AllowAny ,setStandartPermission]
+    permission_classes=[SetStandardPermission]
     authentication_classes = [TokenAuthentication]
     pagination_class = None
     
     
     def get(self, request, pk=None):
+        if request.user.id == None:
+            return Response({"error":"Benutzer ist nicht authentifiziert."},status=status.HTTP_401_UNAUTHORIZED)
         if pk:
             order = get_object_or_404(Order, pk=pk)
             if order.customer_user != request.user and order.business_user != request.user:
@@ -84,6 +86,9 @@ class OrderViewSet(APIView):
 
         offer_id = data.get("offer_id")
         offer_detail_id = data.get("offer_detail_id")
+        
+        if not UserProfile.objects.filter(user = request.user.id):
+            return Response({"error":"Benutzer ist nicht authentifiziert."},status=status.HTTP_401_UNAUTHORIZED)
 
         if not offer_id and not offer_detail_id:
             return Response({'error': 'Ein Angebot oder OfferDetail muss angegeben werden.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -133,6 +138,9 @@ class OrderViewSet(APIView):
         If the request body does not contain a valid status, a 400 response is returned.
         """
         order = get_object_or_404(Order, pk=pk)
+        
+        if not UserProfile.objects.filter(user = request.user.id):
+            return Response({"error":"Benutzer ist nicht authentifiziert."},status=status.HTTP_401_UNAUTHORIZED)
 
         if order.customer_user != request.user and order.business_user != request.user:
             return Response({'error': 'Keine Berechtigung für diese Bestellung.'}, status=status.HTTP_403_FORBIDDEN)

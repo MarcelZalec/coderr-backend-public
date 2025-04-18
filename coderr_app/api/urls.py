@@ -16,5 +16,5 @@ urlpatterns = [
     path('profile/<int:user>/', UserProfileDetail.as_view(), name='profile-detail'),
     path('reviews/', include('reviews_app.api.urls')),
     path('login/', CustomLoginView.as_view()),
-    path('registration/', RegistrationView.as_view()),
+    path('registration/', RegistrationView.as_view(), name='registration'),
 ]
