@@ -48,12 +48,19 @@ class SetStandardPermission(BasePermission):
 
 
 class IsCustomer(BasePermission):
-
-    def has_object_permission(self, request, view, obj):
+    
+    def has_permission(self, request, view):
+        if not request.user.is_authenticated:
+            raise NotAuthenticated({'error': 'Benutzer ist nicht authentifiziert.'})
+        if request.method == 'GET':
+            return True
         if request.method in ['DELETE'] and request.user.is_superuser:
             return True
-        if request.method == 'GET':
-            return IsAuthenticated()
-        if request.method in ['PATCH', 'POST', 'DELETE'] and request.user.profile.type == "customer" and request.user == obj.reviewer:
+        if request.method in ['PATCH', 'POST', 'DELETE'] and request.user.profile.type == "customer":
+            return True
+        return False
+
+    def has_object_permission(self, request, view, obj):
+        if request.user == obj.reviewer or request.user.is_superuser:
             return True
         return False

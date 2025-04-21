@@ -6,32 +6,36 @@ from profile_app.models import UserProfile
 from .serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from auth_app.api.permissions import SetStandardPermission, IsOwnerOrAdmin, AllowAny, IsAuthenticated
+from auth_app.api.permissions import IsOwnerOrAdmin
+from .permissions import *
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
 
 class CompletedOrderCount(APIView):
-    permission_classes = [IsOwnerOrAdmin]
+    permission_classes = [ViewCounts]
     authentication_classes = [TokenAuthentication]
     
     def get(self, request, business_user_id):
+        if not UserProfile.objects.filter(id = business_user_id):
+            return Response({"error": "Kein Geschäftsnutzer mit der angegebenen ID gefunden."}, status=status.HTTP_404_NOT_FOUND)
         try:
             completed_order_count = Order.objects.filter(business_user = business_user_id, status='completed').count()
+            print(f"das ist der Count === {completed_order_count}")
             return Response({'completed_order_count': completed_order_count}, status=status.HTTP_200_OK)
         except Exception as e :
-            return Response({'error': f'Ein Fehler ist aufgetreten: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"error": f"Ein Fehler ist aufgetreten: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class OrderCountAPIView(APIView):
-    permission_classes = [IsOwnerOrAdmin]
+    permission_classes = [ViewCounts]
     authentication_classes = [TokenAuthentication]
     
     def get(self, request, business_user_id):
         try:
             user = UserProfile.objects.get(user__id = business_user_id)
         except UserProfile.DoesNotExist:
-            return Response({"error": "UserProfile wurde nicht gefunden."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Kein Geschäftsnutzer mit der angegebenen ID gefunden."}, status=status.HTTP_404_NOT_FOUND)
         
         if user.type != 'business':
             return Response({"error": "Kein Business-User."}, status=status.HTTP_404_NOT_FOUND)
@@ -41,7 +45,7 @@ class OrderCountAPIView(APIView):
 
 
 class OrderViewSet(APIView):
-    permission_classes=[SetStandardPermission]
+    permission_classes=[OrderPermission]
     authentication_classes = [TokenAuthentication]
     pagination_class = None
     
