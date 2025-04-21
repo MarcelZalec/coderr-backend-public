@@ -4,7 +4,8 @@ from .serializer import *
 from .pagination import ResultPagination
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import OfferFilter
-from auth_app.api.permissions import IsAuthenticated, SetStandardPermission
+from auth_app.api.permissions import IsAuthenticated
+from .permissions import OfferPermission
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 
@@ -15,7 +16,7 @@ class OfferViewSet(viewsets.ModelViewSet):
     search_fields = ['title', 'description']
     ordering_fields = ['min_price', 'updated_at']
     pagination_class = ResultPagination
-    permission_classes = [SetStandardPermission]
+    permission_classes = [OfferPermission]
     authentication_classes = [TokenAuthentication]
 
     def get_serializer_class(self):
@@ -38,7 +39,7 @@ class OfferViewSet(viewsets.ModelViewSet):
 class SingleOfferDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = OfferDetails.objects.all()
     serializer_class = OfferDetailSerializer
-    permission_classes = [SetStandardPermission]
+    permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
 

@@ -1,7 +1,7 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from auth_app.api.permissions import IsCustomer, AllowAny
+from auth_app.api.permissions import IsCustomer, AllowAny, IsAuthenticated
 from reviews_app.models import Reviews
 from .serializer import ReviewsSerializer, ReviewsPOSTSerializer
 from rest_framework.authentication import TokenAuthentication
@@ -11,7 +11,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     
     queryset = Reviews.objects.all()
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsCustomer]
+    permission_classes = [IsAuthenticated ,IsCustomer]
     filter_backends = [DjangoFilterBackend,filters.OrderingFilter]
     ordering_fields = ['rating', 'updated_at']
     filterset_fields = ['business_user_id', 'reviewer_id']
