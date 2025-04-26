@@ -11,7 +11,7 @@ Start Frontend with
 <code>VS Code LiveServer<code>
 
 1. <b>Clone the repository:</b><br>
-   <code>git clone git@github.com:LukasNolting/coderr-backend.git</code><br>
+   <code>git clone https://github.com/MarcelZalec/coderr-backend-public.git</code><br>
    <code>cd coderr-backend</code><br><br>
 
 2. <b>Create a virtual environment:</b><br>
