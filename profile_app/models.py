@@ -4,6 +4,30 @@ from django.utils.timezone import now
 
 
 class UserProfile(models.Model):
+    """
+    Model representing a user profile.
+
+    Attributes:
+    - USER_TYPES (list): Defines available user types ('customer' or 'business').
+    - user (OneToOneField): Links the profile to a unique user.
+    - username (CharField): Stores the user's username.
+    - first_name (CharField): First name of the user.
+    - last_name (CharField): Last name of the user.
+    - file (FileField): Profile picture or file upload, defaults to a default image.
+    - location (CharField): User's location, defaults to 'nicht angegeben' (not specified).
+    - tel (CharField): Contact telephone number, defaults to 'nicht angegeben'.
+    - description (CharField): User description, defaults to 'nicht angegeben'.
+    - working_hours (CharField): Business working hours, defaults to 'nicht angegeben'.
+    - type (CharField): Defines the user's role, either 'customer' or 'business'.
+    - email (EmailField): Stores the user's email address.
+    - created_at (DateTimeField): Timestamp when the profile was created.
+
+    Choices:
+    - USER_TYPES: Defines user types ('customer' or 'business').
+
+    Methods:
+    - __str__(): Returns a formatted string representation of the user profile.
+    """
     USER_TYPES = [
         ('customer', 'Customer'),
         ('business', 'Business'),

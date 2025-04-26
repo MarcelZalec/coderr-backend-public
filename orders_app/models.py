@@ -4,6 +4,29 @@ from offers_app.models import OfferDetails
 
 
 class Order(models.Model):
+    """
+    Model representing an order between a customer and a business.
+
+    Attributes:
+    - ORDER_STATUS (list): Choices for order status (in_progress, completed, cancelled).
+    - customer_user (ForeignKey): References the customer placing the order.
+    - business_user (ForeignKey): References the business receiving the order.
+    - title (CharField): Title of the order.
+    - revisions (IntegerField): Number of revisions allowed.
+    - delivery_time_in_days (IntegerField): Estimated delivery time in days.
+    - price (DecimalField): Price of the order.
+    - features (JSONField): List of features included in the order.
+    - offer_type (CharField): Defines the type of offer the order is associated with.
+    - status (CharField): Current status of the order.
+    - created_at (DateTimeField): Timestamp for when the order was created.
+    - updated_at (DateTimeField): Timestamp for when the order was last updated.
+
+    Choices:
+    - ORDER_STATUS: Defines available order statuses.
+
+    Methods:
+    - __str__(): Returns the title of the order as a string representation.
+    """
     
     ORDER_STATUS = [
         ("in_progress", "In Progress"),

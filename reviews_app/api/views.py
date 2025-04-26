@@ -8,6 +8,9 @@ from rest_framework.authentication import TokenAuthentication
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for handling reviews with authentication, filtering, and ordering.
+    """
     
     queryset = Reviews.objects.all()
     authentication_classes = [TokenAuthentication]
@@ -18,15 +21,39 @@ class ReviewViewSet(viewsets.ModelViewSet):
     pagination_class = None
     
     def get_serializer_class(self):
+        """
+        Determines the appropriate serializer based on the action.
+
+        Returns:
+        - ReviewsSerializer for 'list' and 'retrieve'.
+        - ReviewsPOSTSerializer for other actions.
+        """
         if self.action in ['list', 'retrieve']:
             return ReviewsSerializer
         return ReviewsPOSTSerializer
     
     
     def perform_create(self, serializer):
+        """
+        Ensures that the authenticated user is set as the reviewer when a new review is created.
+
+        Parameters:
+        - serializer: The serializer instance for validation and saving.
+        """
         serializer.save(reviewer=self.request.user)
 
     def create(self, request, *args, **kwargs):
+        """
+        Handles review creation and returns a formatted response.
+
+        Parameters:
+        - request: The HTTP request object.
+        - *args, **kwargs: Additional parameters for handling request.
+
+        Returns:
+        - Response: Serialized review data upon successful creation (HTTP_201_CREATED).
+        - Response: Validation errors if data is invalid (HTTP_400_BAD_REQUEST).
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         instance = serializer.save(reviewer=self.request.user)
@@ -35,6 +62,16 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return Response(output_serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, *args, **kwargs):
+        """
+        Handles partial updates for reviews and returns formatted response.
+
+        Parameters:
+        - request: The HTTP request object.
+        - *args, **kwargs: Additional parameters for handling request.
+
+        Returns:
+        - Response: Updated review data.
+        """
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)

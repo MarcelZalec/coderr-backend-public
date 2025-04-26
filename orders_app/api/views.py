@@ -17,6 +17,18 @@ class CompletedOrderCount(APIView):
     authentication_classes = [TokenAuthentication]
     
     def get(self, request, business_user_id):
+        """
+        Retrieves the number of completed orders for a business user.
+
+        Parameters:
+        - request: The HTTP request object.
+        - business_user_id: The ID of the business user.
+
+        Returns:
+        - Response containing the completed order count (HTTP_200_OK).
+        - Response with error message if no business user is found (HTTP_404_NOT_FOUND).
+        - Response with error message if an exception occurs (HTTP_500_INTERNAL_SERVER_ERROR).
+        """
         if not UserProfile.objects.filter(id = business_user_id):
             return Response({"error": "Kein Geschäftsnutzer mit der angegebenen ID gefunden."}, status=status.HTTP_404_NOT_FOUND)
         try:
@@ -32,6 +44,18 @@ class OrderCountAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     
     def get(self, request, business_user_id):
+        """
+        Retrieves the number of in-progress orders for a business user.
+
+        Parameters:
+        - request: The HTTP request object.
+        - business_user_id: The ID of the business user.
+
+        Returns:
+        - Response containing the order count (HTTP_200_OK).
+        - Response with error message if the user is not found (HTTP_404_NOT_FOUND).
+        - Response with error message if the user is not a business user (HTTP_404_NOT_FOUND).
+        """
         try:
             user = UserProfile.objects.get(user__id = business_user_id)
         except UserProfile.DoesNotExist:

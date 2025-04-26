@@ -3,6 +3,15 @@ from rest_framework.exceptions import PermissionDenied, AuthenticationFailed, No
 
 
 class IsBusinessUser(BasePermission):
+    """
+    Permission class to ensure that the authenticated user is a business owner.
+
+    Methods:
+    - has_permission(request, view): Checks if the user is a business.
+
+    Raises:
+    - PermissionDenied: If the user is not a business owner.
+    """
     def has_permission(self, request, view):
         print(request.user.profile.type)
         if not request.user or not request.user.profile.type == "business":
@@ -12,6 +21,16 @@ class IsBusinessUser(BasePermission):
 
 
 class IsOwnerOrAdmin(BasePermission):
+    """
+    Permission class to allow only owners or admins to edit or delete objects.
+
+    Methods:
+    - has_object_permission(request, view, obj): Checks object-level permissions.
+
+    Returns:
+    - True: If user is authenticated and owner/admin.
+    - False: Otherwise.
+    """
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS and request.user.is_authenticated:
             return True
@@ -21,8 +40,17 @@ class IsOwnerOrAdmin(BasePermission):
         
         
 class SetStandardPermission(BasePermission):
+    """
+    Standard permission class for general request validation.
+
+    Methods:
+    - has_object_permission(request, view, obj): Checks user authentication and permissions.
+
+    Raises:
+    - NotAuthenticated: If user is not authenticated.
+    - PermissionDenied: If user lacks the required permissions.
+    """
     def has_object_permission(self, request, view, obj):
-        print("⚠️ Permission überprüft!"f"{request.user and request.user.is_authenticated}")
         if not request.user.is_authenticated:
             return NotAuthenticated({'error': 'Benutzer ist nicht authentifiziert.'})
         if request.method == 'GET':
@@ -32,7 +60,6 @@ class SetStandardPermission(BasePermission):
                 raise PermissionDenied({"error": "Benutzer ist nicht authentifiziert."})  # 403
 
         if request.method == 'POST':
-            print(IsBusinessUser().has_object_permission(request, view, obj))
             if IsBusinessUser().has_object_permission(request, view, obj) and request.user.is_authenticated:
                 return True
             else:
@@ -48,6 +75,17 @@ class SetStandardPermission(BasePermission):
 
 
 class IsCustomer(BasePermission):
+    """
+    Permission class to ensure customer-based authorization.
+
+    Methods:
+    - has_permission(request, view): Checks request-level permissions.
+    - has_object_permission(request, view, obj): Checks object-level permissions.
+
+    Raises:
+    - NotAuthenticated: If user is not authenticated.
+    - PermissionDenied: If user lacks necessary permissions.
+    """
     
     def has_permission(self, request, view):
         if not request.user.is_authenticated:

@@ -4,6 +4,22 @@ from django.db.models import Min
 
 
 class OfferFilter(FilterSet):
+    """
+    FilterSet for filtering Offer instances based on various criteria.
+
+    Attributes:
+    - creator_id (NumberFilter): Filters offers by creator (user).
+    - min_price (NumberFilter): Filters offers based on the minimum price.
+    - max_delivery_time (NumberFilter): Filters offers by maximum delivery time.
+
+    Meta:
+    - model: Offer model.
+    - fields: ['creator_id', 'min_price', 'max_delivery_time'].
+
+    Methods:
+    - filter_min_price(queryset, name, value): Filters queryset by minimum price.
+    - filter_max_delivery_time(queryset, name, value): Filters queryset by maximum delivery time.
+    """
     creator_id = NumberFilter(field_name='user')
     min_price = NumberFilter(method='filter_min_price')
     max_delivery_time = NumberFilter(method='filter_max_delivery_time')

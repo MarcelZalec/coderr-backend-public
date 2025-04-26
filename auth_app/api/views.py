@@ -9,6 +9,19 @@ from profile_app.models import UserProfile
 
 
 class RegistrationView(APIView):
+    """
+    API endpoint for user registration.
+
+    Attributes:
+    - permission_classes (list): Allows any user to access.
+
+    Methods:
+    - post(request): Handles user registration.
+
+    Returns:
+    - Response: Contains user details and authentication token upon success.
+    - Response: Returns validation errors if registration fails.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -40,6 +53,19 @@ class RegistrationView(APIView):
 
 
 class CustomLoginView(ObtainAuthToken):
+    """
+    API endpoint for user authentication and token generation.
+
+    Attributes:
+    - permission_classes (list): Allows any user to access.
+
+    Methods:
+    - post(request): Authenticates user and provides authentication token.
+
+    Returns:
+    - Response: Contains user details and authentication token upon success.
+    - Response: Returns validation errors if authentication fails.
+    """
     permission_classes = [AllowAny]
 
     def post(self, request):

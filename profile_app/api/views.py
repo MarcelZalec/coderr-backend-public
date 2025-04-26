@@ -9,6 +9,9 @@ from auth_app.api.permissions import IsOwnerOrAdmin
 
 
 class UserProfileDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+    API endpoint for retrieving, updating, and deleting a user profile.
+    """
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
     permission_classes = [IsOwnerOrAdmin]

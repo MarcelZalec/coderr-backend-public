@@ -3,6 +3,26 @@ from django.contrib.auth.models import User
 
 
 class Reviews(models.Model):
+    """
+    Model representing user reviews for businesses.
+
+    Attributes:
+    - reviewer (ForeignKey): References the user submitting the review.
+    - business_user (ForeignKey): References the business receiving the review.
+    - rating (IntegerField): Stores the rating given by the reviewer.
+    - description (TextField): Review description provided by the user.
+    - created_at (DateTimeField): Timestamp for when the review was created.
+    - updated_at (DateTimeField): Timestamp for when the review was last updated.
+
+    Constraints:
+    - Ensures a unique review per reviewer-business user pair.
+
+    Meta:
+    - Unique constraint on ('reviewer', 'business_user') to prevent duplicate reviews.
+
+    Methods:
+    - __str__(): Returns a formatted string representation of the review.
+    """
 
     class Meta:
         constraints = [
