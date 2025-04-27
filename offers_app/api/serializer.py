@@ -108,6 +108,8 @@ class OfferWriteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         details_data = validated_data.pop('details')
         offer = Offer.objects.create(**validated_data)
+        if len(details_data) != 3:
+            raise NotFound("Es müssen genau 3 Details vorhanden sein")
         for detail_data in details_data:
             OfferDetails.objects.create(offer=offer, **detail_data)
         return offer

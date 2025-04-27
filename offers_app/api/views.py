@@ -53,9 +53,6 @@ class OfferViewSet(viewsets.ModelViewSet):
         return OfferWriteSerializer
 
     def perform_create(self, serializer):
-        details_data = serializer.validated_data.pop('details')
-        if len(details_data) != 3:
-            raise NotFound("Es müssen genau 3 Details vorhanden sein")
         serializer.save(user=self.request.user)
 
 
