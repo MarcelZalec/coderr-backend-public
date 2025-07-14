@@ -116,6 +116,9 @@ class OfferWriteSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         details_data = validated_data.pop('details', None)
+        d_type = validated_data.pop('offer_type', None)
+        
+        print(d_type)
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
