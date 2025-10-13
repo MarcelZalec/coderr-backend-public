@@ -1,5 +1,16 @@
 /db.sqlite3
 /env
-/media
-/orders_app/api/views.py.old
 .env
+
+**/__pycache__/**
+!**/__pycache__
+!**/__pycache__/__init__.cpython-312.pyc
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+
+/media/*
+# !/media/uploads/
+# !/media/uploads/profiles/
+# !/media/uploads/profiles/default.jpg
+/orders_app/api/views.py.old
